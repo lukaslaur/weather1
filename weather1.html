@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@300&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div class="card">
+    <div class="weather">
+        <h1 class="city">Orai Vilniuje</h1>
+        <div class="temp">14°C</div>
+        <div class="flex">
+            <img src="" alt="" class="icon">
+            <div class="description">Cloudy</div>
+        </div>
+        <div class="humidity">Humidity: 60%</div>
+        <div class="wind">Wind speed: 6km/h</div>
+    </div>
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin:0;
+            background:#222;
+        }
+        .card{
+            background: #000000d0;
+            padding: 2em;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 400px;
+            margin: 1em;
+            font-family: 'Gemunu Libre', sans-serif;
+            color: white;
+            font-size: 20px;
+
+        }
+        .search{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button{
+            margin: 0.5em;
+            border-radius: 50%;
+            border:none;
+        }
+        .description{
+            text-transform: capitalize;
+        }
+        .flex{
+            display:flex;
+            align-items: center;
+        }
+       
+    </style>
+    <script>        
+        const api = "https://api.openweathermap.org/data/2.5/weather?q=Vilnius&units=metric&appid=";
+        const apiKey="9b66bfc08d3704df51a2b955edb80869";
+        let weather ={
+        fetchWeather:function(){
+            fetch(api+apiKey)
+            .then((response)=>response.json())
+            .then((data)=>this.displayWeather(data));
+        },
+        displayWeather:function(data){
+            const{icon, description} = data.weather[0];
+            const{temp, humidity} = data.main;
+            const{speed} = data.wind;
+            console.log(icon, description, temp, humidity, speed);
+            document.querySelector(".icon").src="https://openweathermap.org/img/wn/"+icon+".png"
+            document.querySelector(".temp").innerText=temp+"°C";
+            document.querySelector(".description").innerText=description;
+            document.querySelector(".humidity").innerText="Humidity: "+ humidity +"%";
+            document.querySelector(".wind").innerText="Wind speed: " + speed + "km/h";
+
+            var today = new Date();
+            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+' '+ today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();;
+            console.log(date);
+
+            localStorage.setItem("iconNr",icon);
+            localStorage.setItem("temp",temp);
+            localStorage.setItem("conditionCode",description);
+            localStorage.setItem("humidity",humidity);
+            localStorage.setItem("wind",speed);
+            localStorage.setItem("exactdate", date);
+
+        }
+    }
+        weather.fetchWeather();
+    </script>
+</body>
+</html>
